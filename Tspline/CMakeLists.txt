@@ -6,7 +6,7 @@ find_package(CGAL QUIET COMPONENTS Core )
 
 if ( CGAL_FOUND )
 
-  set(CMAKE_CXX_FLAGS "-frounding-math")
+  set(CMAKE_CXX_FLAGS "-frounding-math /EHsc")
 	
 	# find dependent packages
 if(WIN32 AND NOT CYGWIN)
@@ -49,14 +49,16 @@ endif()
 
   set(SOURCE_H_EXT Utils.hpp)
 
-  add_library(tspline SHARED ${SOURCE_CPP} ${SOURCE_H})
+  add_library(tspline STATIC ${SOURCE_CPP} ${SOURCE_H})
   target_link_libraries(tspline ${CGAL_LIBRARIES})
 
   install(FILES ${SOURCE_H} ${SOURCE_H_EXT} DESTINATION "${INSTALL_INCLUDE_DIR}/Tspline")
+  message(STATUS "${INSTALL_LIB_DIR}")
   install(TARGETS tspline
     EXPORT OpenTsplineTargets
     RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
     LIBRARY DESTINATION "${INSTALL_LIB_DIR}" COMPONENT lib
+    ARCHIVE DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
     PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}/Tspline"
       COMPONENT dev)
 

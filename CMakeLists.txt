@@ -22,7 +22,9 @@ foreach(p LIB BIN INCLUDE CMAKE)
   endif()
 endforeach()
 
-add_definitions("-Wall -Wno-unused-function -fno-strict-aliasing -pthread")
+if(NOT WIN32 OR CYGWIN)
+add_definitions("-Wall -fno-strict-aliasing")
+endif()
 
 include_directories(.)
 

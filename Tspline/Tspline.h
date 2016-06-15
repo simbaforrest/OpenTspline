@@ -209,6 +209,7 @@ public:
   Vertex_iterator get_closest_vertex_by_point(const Point2d &point, double &d_sqr); // CGAL arr domain (point)
   Halfedge_iterator get_closest_edge_by_point(const Point2d &point, double &d_sqr); // CGAL arr domain (point)
   Face_const_iterator get_face_by_point(const Point2d &point); // CGAL arr domain (point)
+  Face_iterator get_face_by_point2(const Point2d &point); // CGAL arr domain (point)
 
   Vertex_iterator get_closest_vertex(const Point_2 &param); // param domain
 
@@ -272,12 +273,13 @@ public:
   void compute_knot_vectors(Vertex_iterator vit,
                             std::vector<double>& s, std::vector<double>& t);
 
+  void make_congruent(int num_vertices_prev);
+
 protected:
   bool compute_violation_1(std::vector<BasisFunction*> &blend, int num_vertices_prev);
   bool compute_violation_2(std::vector<BasisFunction*> &blend);
   void scale_2_matrix(const std::vector<Scale>& scales, Eigen::MatrixXd& M, int num_vertices_prev);
   void update_control_points(const std::vector<Scale>& scales, int num_vertices_prev, Eigen::MatrixXd& M);
-  void make_congruent(int num_vertices_prev);
   void make_congruent(int num_vertices_prev, Eigen::MatrixXd& M);
 
   virtual Arrangement_2::Vertex_iterator insert_vertex(Halfedge_iterator e, Point2d param);

@@ -100,7 +100,7 @@ void PolyhedronShortestPath(Polyhedron& P,
   WeightAPMap weight_apmap = WeightAPMap(edge2weight);
   edge_iterator ei, ei_end;
   for(boost::tie(ei,ei_end)=boost::edges(P); ei!=ei_end; ++ei)
-    edge2weight.insert(make_pair(*ei,(*ei)->opposite()->weight())); // opposite: we compute from b to a
+    edge2weight.insert(make_pair(*ei,(*ei).opposite().halfedge()->weight())); // opposite: we compute from b to a
 
   // run dijkstra
   boost::detail::dijkstra_dispatch2(P, b, distance_pmap, weight_apmap, vertex_index_pmap,
@@ -114,11 +114,12 @@ void PolyhedronShortestPath(Polyhedron& P,
 
 void SetEdgeWeightsEuclidean(Polyhedron& P)
 {
-  edge_descriptor e;
-  for(e=P.edges_begin(); e!=P.edges_end(); e++)
+  edge_descriptor e(P.edges_begin());
+  edge_descriptor e_end(P.edges_end());
+  for(; e!=e_end; e=e.next())
   {
-    e->weight (sqrt( (e->vertex()->point() - e->opposite()->vertex()->point()).squared_length() ));
-    e->opposite()->weight(e->weight());
+    e.halfedge()->weight (sqrt( (e.halfedge()->vertex()->point() - e.opposite().halfedge()->vertex()->point()).squared_length() ));
+	e.opposite().halfedge()->weight(e.halfedge()->weight());
   }
 }
 

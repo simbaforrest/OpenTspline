@@ -1702,6 +1702,19 @@ Tspline::Face_const_iterator Tspline::get_face_by_point(const Point2d &point)
   return faces_end();
 }
 
+Tspline::Face_iterator Tspline::get_face_by_point2(const Point2d &point)
+{
+	CGAL::Object obj = locate_point(point);
+
+	Face_iterator f;
+
+	if (!obj.empty())
+		if (CGAL::assign(f, obj))
+			return f;
+
+	return faces_end();
+}
+
 Tspline::Vertex_iterator Tspline::get_closest_vertex (const Point2d &param)
 {
   Vertex_iterator v_close;

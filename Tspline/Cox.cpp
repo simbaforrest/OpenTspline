@@ -78,11 +78,14 @@ namespace tspline
           double A(0.0);
           double B(0.0);
 
-          if( !equal(knots[s],knots[s+p]) )
+		  if (s + p < nknots && !equal(knots[s], knots[s + p]))
             A = (xi - knots[s]) / (knots[s+p] - knots[s]);
 
-          if( !equal(knots[s+1],knots[s+p+1]) )
+		  if (s + p + 1 < nknots && !equal(knots[s + 1], knots[s + p + 1]))
             B = (knots[s+p+1] - xi) / (knots[s+p+1] - knots[s+1]);
+
+		  /*if(s+p>=nknots)
+			  printf("%d %d %d %f %f\n", s, p, nknots, knots[s + p + 1], B);*/
 
           if(A < 0.0)
             A = 0.0;

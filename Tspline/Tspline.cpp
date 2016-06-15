@@ -415,8 +415,10 @@ Tspline::Vertex_iterator Tspline::split_edge_congruent(Halfedge_iterator &h, Poi
   if(v==vertices_end())
     return v;
 
-  printf("[Tspline::split_edge_congruent] insert vertex: %d\n", v->data().id);
-  v->data().PrintKnotVectors();
+  if (!quiet) {
+	  printf("[Tspline::split_edge_congruent] insert vertex: %d\n", v->data().id);
+	  v->data().PrintKnotVectors();
+  }
 
   insert_missing_edges();
   make_congruent(num_vertices_prev);
