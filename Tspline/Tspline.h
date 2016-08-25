@@ -83,7 +83,7 @@ public:
 
   /** @brief  split a face without changing the physical geometry
    *          assumes that only rectangular faces exist in grid */
-  void refine_congruent(Face_handle f);
+  void refine_congruent(Face_handle f, bool doSplitCross=false);
 
   /** @brief  split all faces that cover more than 'max_num_points' (TFace.point_count) */
   unsigned refine_point_count(unsigned max_num_points=8);
@@ -168,7 +168,7 @@ public:
   // T-spline operations
   CGAL::Object locate_param(const double &s, const double &t);
   CGAL::Object locate_param(Point2d param);
-  CGAL::Object locate_point(const Point2d &p);
+  CGAL::Object locate_point(const Point2d &p) const;
   Eigen::Vector3d center() const; // arithmetic mean of control points
   bool is_rational() const; // all weigths = 1
   bool is_NURBS() const; // regular control mesh
@@ -209,7 +209,6 @@ public:
   Vertex_iterator get_closest_vertex_by_point(const Point2d &point, double &d_sqr); // CGAL arr domain (point)
   Halfedge_iterator get_closest_edge_by_point(const Point2d &point, double &d_sqr); // CGAL arr domain (point)
   Face_const_iterator get_face_by_point(const Point2d &point); // CGAL arr domain (point)
-  Face_iterator get_face_by_point2(const Point2d &point); // CGAL arr domain (point)
 
   Vertex_iterator get_closest_vertex(const Point_2 &param); // param domain
 
@@ -275,18 +274,18 @@ public:
 
   void make_congruent(int num_vertices_prev);
 
+  virtual Arrangement_2::Vertex_iterator insert_vertex(Halfedge_iterator e, Point2d param);
+  Arrangement_2::Vertex_iterator insert_vertex(Face_iterator f, Point2d param);
+
+  Arrangement_2::Halfedge_iterator split_horizontal(Face_iterator f, double y);
+  Arrangement_2::Halfedge_iterator split_vertical(Face_iterator f, double x);
+
 protected:
   bool compute_violation_1(std::vector<BasisFunction*> &blend, int num_vertices_prev);
   bool compute_violation_2(std::vector<BasisFunction*> &blend);
   void scale_2_matrix(const std::vector<Scale>& scales, Eigen::MatrixXd& M, int num_vertices_prev);
   void update_control_points(const std::vector<Scale>& scales, int num_vertices_prev, Eigen::MatrixXd& M);
   void make_congruent(int num_vertices_prev, Eigen::MatrixXd& M);
-
-  virtual Arrangement_2::Vertex_iterator insert_vertex(Halfedge_iterator e, Point2d param);
-  Arrangement_2::Vertex_iterator insert_vertex(Face_iterator f, Point2d param);
-
-  Arrangement_2::Halfedge_iterator split_horizontal(Face_iterator f, double y);
-  Arrangement_2::Halfedge_iterator split_vertical(Face_iterator f, double x);
 
   friend class BasisFunction;
   friend class BlendingFunction;

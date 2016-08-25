@@ -176,7 +176,7 @@ void Tspline::refine(Face_handle f, bool insert_edges, bool update_knots) // ass
     update_knot_vectors();
 }
 
-void Tspline::refine_congruent(Face_handle f) // assumes that only rectangular faces exist in grid
+void Tspline::refine_congruent(Face_handle f, bool doSplitCross/* = false*/) // assumes that only rectangular faces exist in grid
 {
   if (f->is_unbounded() || !f->has_outer_ccb())
     throw std::runtime_error("[Tspline::refine_congruent] Error, face is unbounded or has no outer contour\n");
@@ -185,13 +185,24 @@ void Tspline::refine_congruent(Face_handle f) // assumes that only rectangular f
   Eigen::Vector4d bb;
   face_bounding_box(fc, bb);
 
-  double w = bb(1) - bb(0);
-  double h = bb(3) - bb(2);
+  if (doSplitCross) {
+	  double s = (bb(1) + bb(0)) * 0.5;
+	  double t = (bb(3) + bb(2)) * 0.5;
 
-  if(w>h)
-    split_vertical_congruent(f, bb(0)+0.5*w);
-  else
-    split_horizontal_congruent(f, bb(2)+0.5*h);
+	  Point2d param(s, t);
+	  insert_vertex(f, param);
+
+	  insert_missing_edges();
+	  update_knot_vectors();
+  } else {
+	  double w = bb(1) - bb(0);
+	  double h = bb(3) - bb(2);
+
+	  if (w>h)
+		  split_vertical_congruent(f, bb(0) + 0.5*w);
+	  else
+		  split_horizontal_congruent(f, bb(2) + 0.5*h);
+  }
 }
 
 unsigned Tspline::refine_point_count(unsigned max_num_points)

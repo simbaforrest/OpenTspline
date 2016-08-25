@@ -1084,9 +1084,10 @@ CGAL::Object Tspline::locate_param (Point2d param)
   return CGAL::Object();
 }
 
-CGAL::Object Tspline::locate_point(const Point2d& p)
+CGAL::Object Tspline::locate_point(const Point2d& p) const
 {
-  NaivePointLocation npl(*this);
+  //NaivePointLocation npl(*this);
+	WalkAlongLinePointLocation npl(*this);
 
   return npl.locate(p);
 }
@@ -1700,19 +1701,6 @@ Tspline::Face_const_iterator Tspline::get_face_by_point(const Point2d &point)
       return f;
 
   return faces_end();
-}
-
-Tspline::Face_iterator Tspline::get_face_by_point2(const Point2d &point)
-{
-	CGAL::Object obj = locate_point(point);
-
-	Face_iterator f;
-
-	if (!obj.empty())
-		if (CGAL::assign(f, obj))
-			return f;
-
-	return faces_end();
 }
 
 Tspline::Vertex_iterator Tspline::get_closest_vertex (const Point2d &param)

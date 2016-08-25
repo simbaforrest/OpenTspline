@@ -41,6 +41,7 @@
 #include "Math.hpp"
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Arr_naive_point_location.h>
+#include <CGAL/Arr_walk_along_line_point_location.h>
 
 namespace tspline {
 
@@ -117,6 +118,7 @@ struct TFace
 typedef CGAL::Arr_extended_dcel<Traits_2, TVertex, THalfedge, TFace> Dcel;
 typedef CGAL::Arrangement_2<Traits_2, Dcel> Arrangement_2;
 typedef CGAL::Arr_naive_point_location<Arrangement_2> NaivePointLocation;
+typedef CGAL::Arr_walk_along_line_point_location<Arrangement_2> WalkAlongLinePointLocation;
 typedef std::pair<Arrangement_2::Vertex_iterator,Arrangement_2::Vertex_iterator> VertexPair;
 
 /** @brief storage for basis functions and derivatives (boosts efficiency when T-mesh is not changing) */

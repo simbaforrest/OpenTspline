@@ -6,16 +6,19 @@ find_package(CGAL QUIET COMPONENTS Core )
 
 if ( CGAL_FOUND )
 
-  set(CMAKE_CXX_FLAGS "-frounding-math /EHsc")
+  
 	
 	# find dependent packages
 if(WIN32 AND NOT CYGWIN)
+  set(CMAKE_CXX_FLAGS "/EHsc")
+  add_definitions(-D_USE_MATH_DEFINES)
   set(EIGEN3_INCLUDE_DIRS "C:/Eigen/" CACHE PATH "Include directory for Eigen3 library.")
 else()
+  set(CMAKE_CXX_FLAGS "-frounding-math /EHsc")
   find_package(PkgConfig REQUIRED)
   pkg_search_module(EIGEN3 REQUIRED eigen3)
-  include_directories(${EIGEN3_INCLUDE_DIRS})
 endif()
+  include_directories(${EIGEN3_INCLUDE_DIRS})
 
 
 	include( ${CGAL_USE_FILE} )
